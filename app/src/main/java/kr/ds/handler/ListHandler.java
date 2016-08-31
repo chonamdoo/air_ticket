@@ -3,6 +3,8 @@ package kr.ds.handler;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.facebook.ads.NativeAd;
+
 /**
  * Created by Administrator on 2016-08-05.
  */
@@ -14,6 +16,7 @@ public class ListHandler {
     public String start;
     public String end;
     private int isLayout;
+    private NativeAd nativeAd;
 
     public String getImage() {
         return image;
@@ -61,5 +64,13 @@ public class ListHandler {
 
     public void setIsLayout(int isLayout) {
         this.isLayout = isLayout;
+    }
+
+    public NativeAd getNativeAd() {
+        return nativeAd;
+    }
+
+    public void setNativeAd(NativeAd nativeAd) {
+        this.nativeAd = nativeAd;
     }
 }

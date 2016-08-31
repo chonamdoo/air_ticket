@@ -15,9 +15,15 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdListener;
+import com.facebook.ads.NativeAd;
+import com.facebook.ads.NativeAdsManager;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import kr.ds.adapter.ListAdapter;
 import kr.ds.air_ticket.R;
@@ -30,11 +36,11 @@ import kr.ds.utils.DsDebugUtils;
 /**
  * Created by Administrator on 2016-08-31.
  */
-public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener{
+public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.OnRefreshListener {
 
     private ArrayList<ListHandler> mData;
     private ArrayList<ListHandler> mMainData;
-    private int mNumber = 10;
+    private int mNumber = 3;
     private int mPage = 1;
     private int startPage = 0;
     private int endPage = 0;
@@ -47,6 +53,10 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     private int mCurrentScrollState;
     private Boolean mIsTheLoding = false;
     private SwipeRefreshLayout mSwipeLayout;
+
+
+    private NativeAdsManager listNativeAdsManager;
+    private int maxAd = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -76,7 +86,6 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-
         mProgressBar.setVisibility(View.VISIBLE);
         new ListData().clear().setCallBack(new BaseResultListener() {
             @Override
@@ -96,7 +105,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
                             startPage = (mPage-1) * mNumber;
                             endPage = mMainData.size();
                         }
-                        mData  = new ArrayList<ListHandler>();
+                        mData  = new ArrayList<>();
                         for(int i=startPage; i< endPage; i++){
                             mData.add(mMainData.get(i));
                         }
@@ -156,7 +165,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
                 mIsTheLoding = false;
                 if(data != null){
                     mPage = 1;
-                    mData  = new ArrayList<ListHandler>();
+                    mData  = new ArrayList<>();
                     mMainData = (ArrayList<ListHandler>) data;
                     if(mMainData.size() - ((mPage-1)*mNumber) > 0){
                         if(mMainData.size() >= mPage * mNumber){
@@ -166,7 +175,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
                             startPage = (mPage-1) * mNumber;
                             endPage = mMainData.size();
                         }
-                        mData  = new ArrayList<ListHandler>();
+                        mData  = new ArrayList<>();
                         for(int i=startPage; i< endPage; i++){
                             mData.add(mMainData.get(i));
                         }
@@ -191,6 +200,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     }
 
     public void onLoadMore(){
+
         mPage++;
         DsDebugUtils.Message(mMainData.size()+"");
         DsDebugUtils.Message(mPage+"");
@@ -211,4 +221,5 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
             mIsTheLoding = false;
         }
     }
+
 }

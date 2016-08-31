@@ -1,6 +1,12 @@
 package kr.ds.data;
 
+import android.app.Activity;
 import android.content.Context;
+
+import com.facebook.ads.Ad;
+import com.facebook.ads.AdError;
+import com.facebook.ads.AdListener;
+import com.facebook.ads.NativeAdsManager;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -25,6 +31,7 @@ public class ListData extends BaseData {
     private ListHandler mListHandler;
     private ArrayList<ListHandler> mData;
     private BaseResultListener mResultListener;
+
     public ListData(){
     }
 
@@ -68,7 +75,6 @@ public class ListData extends BaseData {
                 String[] summery = new String[2];
                 summery[0] = summeryjsonObject.getString("result");
                 summery[1] = summeryjsonObject.getString("msg");
-
                 if (result.matches("success")) {
                     JSONArray jsonArray = jsonObject.getJSONArray("list");
                     for (int i = 0; i < jsonArray.length(); i++) {
@@ -89,6 +95,9 @@ public class ListData extends BaseData {
                         }
                     }
                 }
+
+
+
                 return summery;
 
             }
@@ -132,4 +141,6 @@ public class ListData extends BaseData {
         mResultListener = (BaseResultListener) resultListener;
         return this;
     }
+
+
 }

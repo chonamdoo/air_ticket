@@ -6,16 +6,30 @@ android {
 
     defaultConfig {
         applicationId "kr.ds.air_ticket"
-        minSdkVersion 23
+        minSdkVersion 15
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    productFlavors {
+        //prod를 선택하여 사이닝 함.
+        dev {
+            minSdkVersion 21
+        }
+        prod {
+            minSdkVersion 15
+        }
+    }
+
+    repositories {
+        mavenCentral()
     }
 }
 
@@ -32,5 +46,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.3.0'
     compile 'com.android.support:design:23.3.0'
     compile 'com.google.android.gms:play-services:8.4.0'
+    compile 'com.facebook.android:audience-network-sdk:4.+'
     compile 'com.android.support:multidex:1.0.0'
 }
