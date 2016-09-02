@@ -82,6 +82,8 @@ public class ListData extends BaseData {
                         mData.add(new ListHandler());
                         if (mData.size() > 0) {
                             mListHandler = mData.get(mData.size() - 1);
+
+                            mListHandler.setName(jsonObject1.getString("name"));
                             mListHandler.setImage(jsonObject1.getString("image"));
                             mListHandler.setTitle(jsonObject1.getString("title"));
                             mListHandler.setLink(jsonObject1.getString("link"));
@@ -92,6 +94,7 @@ public class ListData extends BaseData {
                             }else{
                                 mListHandler.setIsLayout(0);
                             }
+                            mListHandler.setNativeAd(null);
                         }
                     }
                 }

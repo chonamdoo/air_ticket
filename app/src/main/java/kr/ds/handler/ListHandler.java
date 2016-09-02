@@ -9,7 +9,7 @@ import com.facebook.ads.NativeAd;
  * Created by Administrator on 2016-08-05.
  */
 public class ListHandler {
-
+    public String name;
     public String image;
     public String title;
     public String link;
@@ -17,6 +17,15 @@ public class ListHandler {
     public String end;
     private int isLayout;
     private NativeAd nativeAd;
+    private boolean isNativeLayout;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getImage() {
         return image;
@@ -72,5 +81,13 @@ public class ListHandler {
 
     public void setNativeAd(NativeAd nativeAd) {
         this.nativeAd = nativeAd;
+    }
+
+    public boolean isNativeLayout() {
+        return isNativeLayout;
+    }
+
+    public void setNativeLayout(boolean nativeLayout) {
+        isNativeLayout = nativeLayout;
     }
 }

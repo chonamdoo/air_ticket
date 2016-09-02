@@ -2,6 +2,7 @@ package kr.ds.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,9 +13,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 
+import com.facebook.ads.AbstractAdListener;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
 import com.facebook.ads.AdListener;
@@ -40,7 +43,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
 
     private ArrayList<ListHandler> mData;
     private ArrayList<ListHandler> mMainData;
-    private int mNumber = 3;
+    private int mNumber = 6;
     private int mPage = 1;
     private int startPage = 0;
     private int endPage = 0;
@@ -58,6 +61,9 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     private NativeAdsManager listNativeAdsManager;
     private int maxAd = 0;
 
+    private NativeAd mNativeAd = null;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,9 +75,9 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
             public void onItemClick(AdapterView<?> parent, View view,
                                     int position, long id) {
                 // TODO Auto-generated method stub
-//                Intent NextIntent = new Intent(mContext, TabListViewActivity.class);
-//                NextIntent.putExtra("data", mData.get(position));
-//                startActivity(NextIntent);
+                Log.i("TEST",mData.get(position).getLink()+"");
+                Intent NextIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mData.get(position).getLink()));
+                startActivity(NextIntent);
             }
         });
 
@@ -86,6 +92,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
+        setNative();
         mProgressBar.setVisibility(View.VISIBLE);
         new ListData().clear().setCallBack(new BaseResultListener() {
             @Override
@@ -107,6 +114,9 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
                         }
                         mData  = new ArrayList<>();
                         for(int i=startPage; i< endPage; i++){
+                            if(mMainData.get(i).getIsLayout() == 1){
+                                mMainData.get(i).setNativeAd(mNativeAd);
+                            }
                             mData.add(mMainData.get(i));
                         }
                         mListAdapter = new ListAdapter(getActivity(), mData);
@@ -151,8 +161,17 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
             }
         });
     }
+
+    public void setNative(){
+
+        mNativeAd = new NativeAd(getActivity(), "294077530963387_294077644296709");
+        mNativeAd.loadAd();
+
+    }
+
     @Override
     public void onRefresh() {
+        setNative();
         // TODO Auto-generated method stub
         new ListData().clear().setCallBack(new BaseResultListener() {
             @Override
@@ -177,6 +196,9 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
                         }
                         mData  = new ArrayList<>();
                         for(int i=startPage; i< endPage; i++){
+                            if(mMainData.get(i).getIsLayout() == 1){
+                                mMainData.get(i).setNativeAd(mNativeAd);
+                            }
                             mData.add(mMainData.get(i));
                         }
                         mListAdapter = new ListAdapter(getActivity(), mData);
@@ -195,12 +217,10 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
             }
         }).setUrl(Config.URL+Config.URL_XML+Config.URL_LIST).setParam("").getView();
 
-
-
     }
 
     public void onLoadMore(){
-
+        setNative();
         mPage++;
         DsDebugUtils.Message(mMainData.size()+"");
         DsDebugUtils.Message(mPage+"");
@@ -215,6 +235,9 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
                 endPage = mMainData.size();
             }
             for(int i=startPage; i< endPage; i++){
+                if(mMainData.get(i).getIsLayout() == 1){
+                    mMainData.get(i).setNativeAd(mNativeAd);
+                }
                 mData.add(mMainData.get(i));
             }
             mListAdapter.notifyDataSetChanged();

@@ -3,6 +3,7 @@ package kr.ds.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,7 +43,6 @@ public class ListAdapter extends BaseAdapter {
 
     private static final int TYPE_BASIC = 0;
     private static final int TYPE_AD = 1;
-    private NativeAd mNativeAd;
 
     public ListAdapter(Context context, ArrayList<ListHandler> data) {
         mContext = context;
@@ -92,7 +92,7 @@ public class ListAdapter extends BaseAdapter {
             switch (getItemViewType(position)){
                 case TYPE_BASIC:
                     convertView = mInflater.inflate(R.layout.fragment_list1_item1,null);
-
+                    holder.textViewTitle = (TextView) convertView.findViewById(R.id.textView_title);
                     holder.textViewDate = (TextView) convertView.findViewById(R.id.textView_date);
                     holder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
                     holder.progressbar = (ProgressBar) convertView.findViewById(R.id.progressBar);
@@ -101,7 +101,16 @@ public class ListAdapter extends BaseAdapter {
                     break;
                 case TYPE_AD:
                     convertView = mInflater.inflate(R.layout.fragment_list1_item2_facebook,null);
-                    //holder.linearLayoutNative = (LinearLayout)convertView.findViewById(R.id.linearLayout_native);
+                    holder.linearLayoutNative = (LinearLayout) convertView.findViewById(R.id.linearLayout_native);
+                    holder.linearLayoutNative2 = (LinearLayout) convertView.findViewById(R.id.linearLayout_native2);
+                    holder.linearLayoutNative3 = (LinearLayout) convertView.findViewById(R.id.linearLayout_native3);
+                    holder.nativeAdIcon = (ImageView) convertView.findViewById(R.id.native_ad_icon);
+                    holder.nativeAdTitle = (TextView) convertView.findViewById(R.id.native_ad_title);
+                    holder.nativeAdBody = (TextView) convertView.findViewById(R.id.native_ad_body);
+                    holder.nativeAdMedia = (MediaView) convertView.findViewById(R.id.native_ad_media);
+                    holder.nativeAdSocialContext = (TextView) convertView.findViewById(R.id.native_ad_social_context);
+                    holder.nativeAdCallToAction = (Button) convertView.findViewById(R.id.native_ad_call_to_action);
+
                     break;
             }
             convertView.setTag(holder);
@@ -113,19 +122,34 @@ public class ListAdapter extends BaseAdapter {
 
                 if(!DsObjectUtils.isEmpty(mData.get(position).getStart()) && !DsObjectUtils.isEmpty(mData.get(position).getEnd())){
                     try {
+                        holder.textViewDate.setVisibility(View.VISIBLE);
                         String sdate = DsDateUtils.getInstance().getDateDay(mData.get(position).getStart().trim(),"yy-mm-dd");
                         String edate = DsDateUtils.getInstance().getDateDay(mData.get(position).getEnd().trim(),"yy-mm-dd");
                         holder.textViewDate.setText(sdate+" ~ "+edate);
                     } catch (Exception e) {
+                        holder.textViewDate.setVisibility(View.GONE);
+                        holder.textViewDate.setText("");
                         e.printStackTrace();
                     }
                 }else {
+                    holder.textViewDate.setVisibility(View.GONE);
                     holder.textViewDate.setText("");
+
                 }
 
                 if(!DsObjectUtils.isEmpty(mData.get(position).getTitle())){
-                    holder.textViewName.setText(mData.get(position).getTitle());
+                    holder.textViewTitle.setVisibility(View.VISIBLE);
+                    holder.textViewTitle.setText(mData.get(position).getTitle());
                 }else {
+                    holder.textViewTitle.setVisibility(View.GONE);
+                    holder.textViewTitle.setText("");
+                }
+
+                if(!DsObjectUtils.isEmpty(mData.get(position).getName())){
+                    holder.textViewName.setVisibility(View.VISIBLE);
+                    holder.textViewName.setText(mData.get(position).getName());
+                }else {
+                    holder.textViewName.setVisibility(View.GONE);
                     holder.textViewName.setText("");
                 }
 
@@ -148,9 +172,9 @@ public class ListAdapter extends BaseAdapter {
                         @Override
                         public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {
                             // TODO Auto-generated method stub
-                            int width =  getWidth();
-                            int height = (int) (arg2.getHeight() *(width/(float)arg2.getWidth()));
-                            holder.imageView.setLayoutParams(new FrameLayout.LayoutParams(width,height));
+                           // int width =  getWidth();
+                           //int height = (int) (arg2.getHeight() *(width/(float)arg2.getWidth()));
+                           //holder.imageView.setLayoutParams(new FrameLayout.LayoutParams(width,height));
                             holder.imageView.setVisibility(View.VISIBLE);
                             holder.progressbar.setVisibility(View.GONE);
                         }
@@ -168,80 +192,44 @@ public class ListAdapter extends BaseAdapter {
                 break;
             case TYPE_AD:
 
-                final NativeAd mNativeAd = new NativeAd(mContext, "294077530963387_294077644296709");
-                final View ConvertView = convertView;
-                mNativeAd.setAdListener(new AbstractAdListener() {
-                    @Override
-                    public void onError(Ad ad, AdError adError) {
-                        super.onError(ad, adError);
-                        //holder.linearLayoutNative.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onAdLoaded(Ad ad) {
-                        super.onAdLoaded(ad);
-                        if(ad != mNativeAd){
-                            //holder.linearLayoutNative.setVisibility(View.GONE);
-                            return;
-                        }
-                        //holder.linearLayoutNative.setVisibility(View.VISIBLE);
-
-
-                        //holder.linearLayoutNative.addView(mAdView);
-
-                        // Create native UI using the ad metadata.
-                        ImageView nativeAdIcon = (ImageView)ConvertView.findViewById(R.id.native_ad_icon);
-                        TextView nativeAdTitle = (TextView)ConvertView.findViewById(R.id.native_ad_title);
-                        TextView nativeAdBody = (TextView)ConvertView.findViewById(R.id.native_ad_body);
-                        MediaView nativeAdMedia = (MediaView)ConvertView.findViewById(R.id.native_ad_media);
-                        TextView nativeAdSocialContext = (TextView)ConvertView.findViewById(R.id.native_ad_social_context);
-                        Button nativeAdCallToAction = (Button)ConvertView.findViewById(R.id.native_ad_call_to_action);
-
+                Log.i("TEST","1");
+                if(mData.get(position).getNativeAd() != null) {
+                    Log.i("TEST","2");
+                    if (mData.get(position).getNativeAd().isAdLoaded()) {
+                        Log.i("TEST","3");
+                        holder.nativeAdMedia.setVisibility(View.VISIBLE);
+                        holder.linearLayoutNative.setVisibility(View.VISIBLE);
+                        holder.linearLayoutNative2.setVisibility(View.VISIBLE);
+                        holder.linearLayoutNative3.setVisibility(View.VISIBLE);
                         // Setting the Text.
-                        nativeAdSocialContext.setText(mNativeAd.getAdSocialContext());
-                        nativeAdCallToAction.setText(mNativeAd.getAdCallToAction());
-                        nativeAdTitle.setText(mNativeAd.getAdTitle());
-                        nativeAdBody.setText(mNativeAd.getAdBody());
+                        holder.nativeAdSocialContext.setText(mData.get(position).getNativeAd().getAdSocialContext());
+                        holder.nativeAdCallToAction.setText(mData.get(position).getNativeAd().getAdCallToAction());
+                        holder.nativeAdTitle.setText(mData.get(position).getNativeAd().getAdTitle());
+                        holder.nativeAdBody.setText(mData.get(position).getNativeAd().getAdBody());
 
                         // Downloading and setting the ad icon.
-                        NativeAd.Image adIcon = mNativeAd.getAdIcon();
-                        NativeAd.downloadAndDisplayImage(adIcon, nativeAdIcon);
+                        NativeAd.Image adIcon = mData.get(position).getNativeAd().getAdIcon();
+                        NativeAd.downloadAndDisplayImage(adIcon, holder.nativeAdIcon);
 
                         // Download and setting the cover image.
-                        NativeAd.Image adCoverImage = mNativeAd.getAdCoverImage();
-                        nativeAdMedia.setNativeAd(mNativeAd);
+                        NativeAd.Image adCoverImage = mData.get(position).getNativeAd().getAdCoverImage();
+                        holder.nativeAdMedia.setNativeAd(mData.get(position).getNativeAd());
 
-                        // Add adChoices icon
-//                        AdChoicesView adChoicesView = null;
-//                        if (adChoicesView == null) {
-//                            adChoicesView = new AdChoicesView(mContext, mNativeAd, true);
-//                            ConvertView.addView(adChoicesView, 0);
-//                        }
-                        mNativeAd.registerViewForInteraction(ConvertView);
+                        mData.get(position).getNativeAd().registerViewForInteraction(convertView);
+                    } else {
+                        Log.i("TEST","4");
+                        holder.nativeAdMedia.setVisibility(View.GONE);
+                        holder.linearLayoutNative.setVisibility(View.GONE);
+                        holder.linearLayoutNative2.setVisibility(View.GONE);
+                        holder.linearLayoutNative3.setVisibility(View.GONE);
                     }
-
-                    @Override
-                    public void onAdClicked(Ad ad) {
-                        super.onAdClicked(ad);
-                    }
-
-                    @Override
-                    public void onInterstitialDisplayed(Ad ad) {
-                        super.onInterstitialDisplayed(ad);
-                    }
-
-                    @Override
-                    public void onInterstitialDismissed(Ad ad) {
-                        super.onInterstitialDismissed(ad);
-                    }
-
-                    @Override
-                    public void onLoggingImpression(Ad ad) {
-                        super.onLoggingImpression(ad);
-                    }
-                });
-                mNativeAd.loadAd();
-
+                }else{
+                    Log.i("TEST","5");
+                    holder.nativeAdMedia.setVisibility(View.GONE);
+                    holder.linearLayoutNative.setVisibility(View.GONE);
+                    holder.linearLayoutNative2.setVisibility(View.GONE);
+                    holder.linearLayoutNative3.setVisibility(View.GONE);
+                }
                 break;
         }
         return convertView;
@@ -251,9 +239,17 @@ public class ListAdapter extends BaseAdapter {
     class ViewHolder {
         ImageView imageView;
         ProgressBar progressbar;
-        TextView textViewName, textViewDate, textViewText ;
+        TextView textViewTitle, textViewName, textViewDate, textViewText ;
 
         LinearLayout linearLayoutNative;
+        LinearLayout linearLayoutNative2;
+        LinearLayout linearLayoutNative3;
+        ImageView nativeAdIcon;
+        TextView nativeAdTitle;
+        TextView nativeAdBody;
+        MediaView nativeAdMedia;
+        TextView nativeAdSocialContext;
+        Button nativeAdCallToAction;
     }
 
 }
