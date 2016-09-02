@@ -17,7 +17,11 @@ public class Config {
 	
 	public final static int MARKET = 1;
 	public final static int TSTORE = 2;
-	public final static int STORE_TYPE = MARKET;
+	public final static int TYPE = MARKET;
+
+	public static String APP_DOWN_URL_MARKET = "kr.ds.air_ticket";
+	public static String APP_DOWN_TITLE = "원터치 특가 항공권";
+
 
 
 	public static final String GCM_INTENT_FILLTER = "kr.inaweb.GCM_INTENT_FILLTER";

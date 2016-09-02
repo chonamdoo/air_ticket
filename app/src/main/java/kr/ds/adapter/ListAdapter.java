@@ -31,6 +31,7 @@ import kr.ds.air_ticket.R;
 import kr.ds.handler.ListHandler;
 import kr.ds.utils.DsDateUtils;
 import kr.ds.utils.DsObjectUtils;
+import kr.ds.utils.ScreenUtils;
 
 /**
  * Created by Administrator on 2016-08-31.
@@ -172,9 +173,10 @@ public class ListAdapter extends BaseAdapter {
                         @Override
                         public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {
                             // TODO Auto-generated method stub
-                           // int width =  getWidth();
-                           //int height = (int) (arg2.getHeight() *(width/(float)arg2.getWidth()));
-                           //holder.imageView.setLayoutParams(new FrameLayout.LayoutParams(width,height));
+
+                           int width =  getWidth()- ScreenUtils.getInstacne().getPixelFromDPI(mContext, 14);
+                           int height = (int) (arg2.getHeight() *(width/(float)arg2.getWidth()));
+                           holder.imageView.setLayoutParams(new FrameLayout.LayoutParams(width,height));
                             holder.imageView.setVisibility(View.VISIBLE);
                             holder.progressbar.setVisibility(View.GONE);
                         }
