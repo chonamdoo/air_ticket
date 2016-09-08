@@ -10,6 +10,7 @@ public class Config {
 	public static String URL_LIST = "list.php";
 
 	//gcm
+	public static final String ANDROID_ID = "android_id";
 	public static final String SENT_TOKEN_TO_SERVER = "sentTokenToServer";
 	public static final String REGISTRATION_COMPLETE = "registrationComplete";
 	public static final String TOKEN = "token";
@@ -24,7 +25,7 @@ public class Config {
 
 
 
-	public static final String GCM_INTENT_FILLTER = "kr.inaweb.GCM_INTENT_FILLTER";
+	public static final String GCM_INTENT_FILLTER = "kr.ds.GCM_INTENT_FILLTER";
 
 
 

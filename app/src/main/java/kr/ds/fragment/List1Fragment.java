@@ -43,7 +43,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
 
     private ArrayList<ListHandler> mData;
     private ArrayList<ListHandler> mMainData;
-    private int mNumber = 6;
+    private int mNumber = 4;
     private int mPage = 1;
     private int startPage = 0;
     private int endPage = 0;
@@ -63,6 +63,9 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
 
     private NativeAd mNativeAd = null;
 
+    private final static int LIST = 0;
+    private final static int ONLOAD = 1;
+    private final static int REFRESH = 2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -92,8 +95,36 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);
-        setNative();
         mProgressBar.setVisibility(View.VISIBLE);
+        setNative(LIST);
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                // TODO Auto-generated method stub
+                mCurrentScrollState = scrollState;
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+                // TODO Auto-generated method stub
+                int topRowVerticalPosition = (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
+                if(mData != null ){
+                    mSwipeLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
+                }else{
+                    mSwipeLayout.setEnabled(false);
+                }
+                boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
+                if(!mIsTheLoding && loadMore &&  mCurrentScrollState != SCROLL_STATE_IDLE){
+                    mIsTheLoding = true;
+                    onLoadMore();
+                }
+            }
+        });
+    }
+
+    public void setList(){
         new ListData().clear().setCallBack(new BaseResultListener() {
             @Override
             public <T> void OnComplete() {
@@ -134,45 +165,9 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
 
             }
         }).setUrl(Config.URL+Config.URL_XML+Config.URL_LIST).setParam("").getView();
-
-        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-                // TODO Auto-generated method stub
-                mCurrentScrollState = scrollState;
-            }
-
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem,
-                                 int visibleItemCount, int totalItemCount) {
-                // TODO Auto-generated method stub
-                int topRowVerticalPosition = (mListView == null || mListView.getChildCount() == 0) ? 0 : mListView.getChildAt(0).getTop();
-                if(mData != null ){
-                    mSwipeLayout.setEnabled(firstVisibleItem == 0 && topRowVerticalPosition >= 0);
-                }else{
-                    mSwipeLayout.setEnabled(false);
-                }
-                boolean loadMore = firstVisibleItem + visibleItemCount >= totalItemCount;
-                if(!mIsTheLoding && loadMore &&  mCurrentScrollState != SCROLL_STATE_IDLE){
-                    mIsTheLoding = true;
-                    onLoadMore();
-                }
-            }
-        });
     }
 
-    public void setNative(){
-
-        mNativeAd = new NativeAd(getActivity(), "294077530963387_294077644296709");
-        mNativeAd.loadAd();
-
-    }
-
-    @Override
-    public void onRefresh() {
-        setNative();
-        // TODO Auto-generated method stub
+    public void setListRefresh(){
         new ListData().clear().setCallBack(new BaseResultListener() {
             @Override
             public <T> void OnComplete() {
@@ -216,14 +211,10 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
 
             }
         }).setUrl(Config.URL+Config.URL_XML+Config.URL_LIST).setParam("").getView();
-
     }
 
-    public void onLoadMore(){
-        setNative();
+    public void setListOnLoad(){
         mPage++;
-        DsDebugUtils.Message(mMainData.size()+"");
-        DsDebugUtils.Message(mPage+"");
         if(mMainData.size() - ((mPage-1)*mNumber) < 0){
             mIsTheLoding = true;
         }else{
@@ -243,6 +234,45 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
             mListAdapter.notifyDataSetChanged();
             mIsTheLoding = false;
         }
+    }
+
+    public void setNative(final int type){
+
+        mNativeAd = new NativeAd(getActivity(), "294077530963387_294077644296709");
+        mNativeAd.setAdListener(new AbstractAdListener() {
+            @Override
+            public void onError(Ad ad, AdError adError) {
+                super.onError(ad, adError);
+                if(type == LIST){
+                    setList();
+                }else if(type == ONLOAD){
+                    setListOnLoad();
+                }else if(type == REFRESH){
+                    setListRefresh();
+                }
+            }
+            @Override
+            public void onAdLoaded(Ad ad) {
+                super.onAdLoaded(ad);
+                if(type == LIST){
+                    setList();
+                }else if(type == ONLOAD){
+                    setListOnLoad();
+                }else if(type == REFRESH){
+                    setListRefresh();
+                }
+            }
+        });
+        mNativeAd.loadAd();
+    }
+    @Override
+    public void onRefresh() {
+        setNative(REFRESH);
+        // TODO Auto-generated method stub
+    }
+
+    public void onLoadMore(){
+        setNative(ONLOAD);
     }
 
 }

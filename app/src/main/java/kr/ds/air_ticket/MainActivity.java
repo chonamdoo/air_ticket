@@ -1,5 +1,6 @@
 package kr.ds.air_ticket;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -12,10 +13,14 @@ import com.facebook.ads.AbstractAdListener;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdError;
 import com.facebook.ads.NativeAd;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 
+import kr.ds.config.Config;
 import kr.ds.fragment.BaseFragment;
 import kr.ds.fragment.List1Fragment;
 import kr.ds.store.MainStoreTypeDialog;
+import kr.ds.utils.DsObjectUtils;
 import kr.ds.utils.SharedPreference;
 
 public class MainActivity extends BaseActivity {
@@ -26,6 +31,7 @@ public class MainActivity extends BaseActivity {
     private NativeAd mNativeAd;
     private LinearLayout mAdView;
     private Boolean isNativeCheck = false;
+    private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +45,26 @@ public class MainActivity extends BaseActivity {
         }
         mFragment = BaseFragment.newInstance(List1Fragment.class);
         setFragment(mFragment);
+
+        if (checkPlayServices() && DsObjectUtils.getInstance(getApplicationContext()).isEmpty(SharedPreference.getSharedPreference(getApplicationContext(), Config.TOKEN))) { //토큰이 없는경우..
+            Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
+            startService(intent);
+        }
+    }
+
+    private boolean checkPlayServices() {
+        GoogleApiAvailability apiAvailability = GoogleApiAvailability.getInstance();
+        int resultCode = apiAvailability.isGooglePlayServicesAvailable(this);
+        if (resultCode != ConnectionResult.SUCCESS) {
+            if (apiAvailability.isUserResolvableError(resultCode)) {
+                apiAvailability.getErrorDialog(this, resultCode, PLAY_SERVICES_RESOLUTION_REQUEST)
+                        .show();
+            } else {
+                //finish();
+            }
+            return false;
+        }
+        return true;
     }
 
 
