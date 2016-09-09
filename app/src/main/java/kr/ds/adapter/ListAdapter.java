@@ -1,8 +1,10 @@
 package kr.ds.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -85,7 +87,7 @@ public class ListAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(final int position, View convertView, ViewGroup parent) {
         // TODO Auto-generated method stub
         final ViewHolder holder;
         if (convertView == null) {
@@ -98,6 +100,7 @@ public class ListAdapter extends BaseAdapter {
                     holder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
                     holder.progressbar = (ProgressBar) convertView.findViewById(R.id.progressBar);
                     holder.textViewName = (TextView) convertView.findViewById(R.id.textView_name);
+                    holder.button_link = (Button) convertView.findViewById(R.id.button_link);
 
                     break;
                 case TYPE_AD:
@@ -191,6 +194,19 @@ public class ListAdapter extends BaseAdapter {
                     holder.imageView.setVisibility(View.GONE);
                     holder.progressbar.setVisibility(View.GONE);
                 }
+
+                if(!DsObjectUtils.isEmpty(mData.get(position).getReservation_link())){
+                    holder.button_link.setVisibility(View.VISIBLE);
+                    holder.button_link.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent NextIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mData.get(position).getReservation_link()));
+                            mContext.startActivity(NextIntent);
+                        }
+                    });
+                }else {
+                    holder.button_link.setVisibility(View.GONE);
+                }
                 break;
             case TYPE_AD:
 
@@ -242,6 +258,7 @@ public class ListAdapter extends BaseAdapter {
         ImageView imageView;
         ProgressBar progressbar;
         TextView textViewTitle, textViewName, textViewDate, textViewText ;
+        Button button_link;
 
         LinearLayout linearLayoutNative;
         LinearLayout linearLayoutNative2;
@@ -252,6 +269,7 @@ public class ListAdapter extends BaseAdapter {
         MediaView nativeAdMedia;
         TextView nativeAdSocialContext;
         Button nativeAdCallToAction;
+
     }
 
 }

@@ -95,6 +95,7 @@ public class ListData extends BaseData {
                                 mListHandler.setIsLayout(0);
                             }
                             mListHandler.setNativeAd(null);
+                            mListHandler.setReservation_link(jsonObject1.getString("reservation_link"));
                         }
                     }
                 }

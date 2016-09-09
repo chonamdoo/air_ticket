@@ -18,6 +18,7 @@ public class ListHandler {
     private int isLayout;
     private NativeAd nativeAd;
     private boolean isNativeLayout;
+    private String reservation_link;
 
     public String getName() {
         return name;
@@ -89,5 +90,13 @@ public class ListHandler {
 
     public void setNativeLayout(boolean nativeLayout) {
         isNativeLayout = nativeLayout;
+    }
+
+    public String getReservation_link() {
+        return reservation_link;
+    }
+
+    public void setReservation_link(String reservation_link) {
+        this.reservation_link = reservation_link;
     }
 }

@@ -1,5 +1,6 @@
 package kr.ds.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -66,7 +67,14 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
     private final static int LIST = 0;
     private final static int ONLOAD = 1;
     private final static int REFRESH = 2;
+    private Context mContext;
 
+    @Override
+    public void onAttach(Activity activity) {
+        // TODO Auto-generated method stub
+        super.onAttach(activity);
+        mContext = getActivity();
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -150,7 +158,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
                             }
                             mData.add(mMainData.get(i));
                         }
-                        mListAdapter = new ListAdapter(getActivity(), mData);
+                        mListAdapter = new ListAdapter(mContext, mData);
                         AlphaInAnimationAdapter mAlphaInAnimationAdapter = new AlphaInAnimationAdapter(mListAdapter);
                         mAlphaInAnimationAdapter.setAbsListView(mListView);
                         mListView.setAdapter(mAlphaInAnimationAdapter);
@@ -196,7 +204,7 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
                             }
                             mData.add(mMainData.get(i));
                         }
-                        mListAdapter = new ListAdapter(getActivity(), mData);
+                        mListAdapter = new ListAdapter(mContext, mData);
                         AlphaInAnimationAdapter mAlphaInAnimationAdapter = new AlphaInAnimationAdapter(mListAdapter);
                         mAlphaInAnimationAdapter.setAbsListView(mListView);
                         mListView.setAdapter(mAlphaInAnimationAdapter);
