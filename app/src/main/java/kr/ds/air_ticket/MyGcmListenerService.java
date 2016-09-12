@@ -32,6 +32,7 @@ import com.google.android.gms.gcm.GcmListenerService;
 import kr.ds.config.Config;
 import kr.ds.utils.DsObjectUtils;
 import kr.ds.utils.Helper;
+import kr.ds.utils.UniqueID;
 
 
 public class MyGcmListenerService extends GcmListenerService {
@@ -109,7 +110,7 @@ public class MyGcmListenerService extends GcmListenerService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, notificationBuilder.build());
+        notificationManager.notify(UniqueID.getRandomNumber(1000), notificationBuilder.build());
     }
     private void sendNotification(String message, Bitmap bitmap) {
         Intent intent = new Intent(this, MainActivity.class);
@@ -135,6 +136,6 @@ public class MyGcmListenerService extends GcmListenerService {
         NotificationManager notificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        notificationManager.notify(0, notificationBuilder.build());
+        notificationManager.notify(UniqueID.getRandomNumber(1000), notificationBuilder.build());
     }
 }

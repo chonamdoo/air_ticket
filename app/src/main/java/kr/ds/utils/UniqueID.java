@@ -40,5 +40,11 @@ public class UniqueID {
 		return buf.toString();
 	}
 
+	public static int getRandomNumber(int a) {
+		Random rnd =new Random();
+		StringBuffer buf =new StringBuffer();
+		buf.append(rnd.nextInt(a));
+		return Integer.parseInt(buf.toString());
+	}
 
 }

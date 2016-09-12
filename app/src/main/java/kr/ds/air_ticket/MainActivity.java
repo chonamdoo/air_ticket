@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.LinearLayout;
 
@@ -50,6 +51,8 @@ public class MainActivity extends BaseActivity {
             Intent intent = new Intent(getApplicationContext(), RegistrationIntentService.class);
             startService(intent);
         }
+
+        Log.i("TEST", SharedPreference.getSharedPreference(getApplicationContext(), Config.ANDROID_ID));
     }
 
     private boolean checkPlayServices() {

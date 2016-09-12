@@ -158,6 +158,15 @@ public class ListAdapter extends BaseAdapter {
                 }
 
                 if(!DsObjectUtils.isEmpty(mData.get(position).getImage())){
+
+                    holder.imageView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent NextIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(mData.get(position).getLink()));
+                            mContext.startActivity(NextIntent);
+                        }
+                    });
+
                     imageDownloader.displayImage(mData.get(position).getImage(), holder.imageView, new ImageLoadingListener() {
 
                         @Override
