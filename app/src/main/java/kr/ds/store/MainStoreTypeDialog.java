@@ -42,7 +42,6 @@ public class MainStoreTypeDialog extends DialogFragment implements OnClickListen
 	private TextView mTextView1, mTextView2, mTextView3, mTextView4;
 
 	private LinearLayout  mNativeAdContainer;
-	private LinearLayout mLinearLayoutBg;
 	private LinearLayout mAdView;
 	private Boolean isNativeCheck = false;
 	private NativeAd mNativeAd;
@@ -111,7 +110,6 @@ public class MainStoreTypeDialog extends DialogFragment implements OnClickListen
 		LayoutInflater mLayoutInflater = getActivity().getLayoutInflater();
 		View view = mLayoutInflater.inflate(R.layout.dialog, null);
 		mNativeAdContainer = (LinearLayout)view.findViewById(R.id.linearLayout_native);
-		mLinearLayoutBg = (LinearLayout)view.findViewById(R.id.linearLayout_bg);
 		(mTextView1 = (TextView)view.findViewById(R.id.textView1)).setOnClickListener(this);
 		(mTextView3 = (TextView)view.findViewById(R.id.textView3)).setOnClickListener(this);
 		(mTextView4 = (TextView)view.findViewById(R.id.textView4)).setOnClickListener(this);
@@ -120,7 +118,6 @@ public class MainStoreTypeDialog extends DialogFragment implements OnClickListen
 			setView();
 		}else{
 			mNativeAdContainer.setVisibility(View.GONE);
-			mLinearLayoutBg.setVisibility(View.VISIBLE);
 		}
 
 		mBuilder.setView(view);

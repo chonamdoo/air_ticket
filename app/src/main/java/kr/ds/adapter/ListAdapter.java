@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
 import android.net.Uri;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.facebook.ads.AbstractAdListener;
 import com.facebook.ads.Ad;
@@ -33,6 +35,7 @@ import kr.ds.air_ticket.R;
 import kr.ds.handler.ListHandler;
 import kr.ds.utils.DsDateUtils;
 import kr.ds.utils.DsObjectUtils;
+import kr.ds.utils.Helper;
 import kr.ds.utils.ScreenUtils;
 
 /**
@@ -101,6 +104,7 @@ public class ListAdapter extends BaseAdapter {
                     holder.progressbar = (ProgressBar) convertView.findViewById(R.id.progressBar);
                     holder.textViewName = (TextView) convertView.findViewById(R.id.textView_name);
                     holder.button_link = (Button) convertView.findViewById(R.id.button_link);
+                    holder.button_share = (Button) convertView.findViewById(R.id.button_share);
 
                     break;
                 case TYPE_AD:
@@ -204,6 +208,21 @@ public class ListAdapter extends BaseAdapter {
                     holder.progressbar.setVisibility(View.GONE);
                 }
 
+                holder.button_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        try {
+                            Intent NextIntent = new Intent(Intent.ACTION_SEND);
+                            NextIntent.setType("text/plain");
+                            NextIntent.putExtra(Intent.EXTRA_SUBJECT, "[" + mData.get(position).getName() + "]" + mData.get(position).getTitle());
+                            NextIntent.putExtra(Intent.EXTRA_TEXT, "반갑습니다.^^ 원터치 특가 항공권 입니다.\n\n바로가기:\n" + mData.get(position).getLink() + "\n\n" + "어플다운:\n" + "https://play.google.com/store/apps/details?id=kr.ds.air_ticket");
+                            mContext.startActivity(Intent.createChooser(NextIntent, "[" + mData.get(position).getName() + "]" + mData.get(position).getTitle() + " 공유하기"));
+                        }catch (Exception e){
+                            Toast.makeText(mContext,"오류가 발생되었습니다.계속문제가 발생시 관리자에게 문의 해주시기 바랍니다.",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
                 if(!DsObjectUtils.isEmpty(mData.get(position).getReservation_link())){
                     holder.button_link.setVisibility(View.VISIBLE);
                     holder.button_link.setOnClickListener(new View.OnClickListener() {
@@ -268,6 +287,8 @@ public class ListAdapter extends BaseAdapter {
         ProgressBar progressbar;
         TextView textViewTitle, textViewName, textViewDate, textViewText ;
         Button button_link;
+        Button button_share
+                ;
 
         LinearLayout linearLayoutNative;
         LinearLayout linearLayoutNative2;

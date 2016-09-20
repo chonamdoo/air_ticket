@@ -1,6 +1,8 @@
 package kr.ds.air_ticket;
 
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -34,9 +36,12 @@ public class MainActivity extends BaseActivity {
     private Boolean isNativeCheck = false;
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
+    private com.facebook.ads.InterstitialAd interstitialAdFackBook;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setFaceBook();
         setNative();
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -53,6 +58,46 @@ public class MainActivity extends BaseActivity {
         }
 
         Log.i("TEST", SharedPreference.getSharedPreference(getApplicationContext(), Config.ANDROID_ID));
+    }
+
+    private void setFaceBook() {
+
+        interstitialAdFackBook = new com.facebook.ads.InterstitialAd(getApplicationContext(), "294077530963387_300903850280755");
+        interstitialAdFackBook.setAdListener(new AbstractAdListener() {
+            @Override
+            public void onError(Ad ad, AdError adError) {
+                super.onError(ad, adError);
+                Log.i("TEST","error");
+                Log.i("TEST",adError.toString());
+
+            }
+            @Override
+            public void onAdLoaded(Ad ad) {
+                super.onAdLoaded(ad);
+                interstitialAdFackBook.show();
+            }
+
+            @Override
+            public void onAdClicked(Ad ad) {
+                super.onAdClicked(ad);
+            }
+
+            @Override
+            public void onInterstitialDisplayed(Ad ad) {
+                super.onInterstitialDisplayed(ad);
+            }
+
+            @Override
+            public void onInterstitialDismissed(Ad ad) {
+                super.onInterstitialDismissed(ad);
+            }
+
+            @Override
+            public void onLoggingImpression(Ad ad) {
+                super.onLoggingImpression(ad);
+            }
+        });
+        interstitialAdFackBook.loadAd();
     }
 
     private boolean checkPlayServices() {
@@ -129,5 +174,12 @@ public class MainActivity extends BaseActivity {
             }
         }
         return super.onKeyDown(KeyCode, event);
+    }
+    @Override
+    protected void onDestroy() {
+        if (interstitialAdFackBook != null) {
+            interstitialAdFackBook.destroy();
+        }
+        super.onDestroy();
     }
 }
