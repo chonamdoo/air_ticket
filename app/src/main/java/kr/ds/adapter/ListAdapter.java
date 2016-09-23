@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Point;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.util.Log;
@@ -19,6 +20,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.target.ImageViewTarget;
 import com.facebook.ads.AbstractAdListener;
 import com.facebook.ads.Ad;
 import com.facebook.ads.AdChoicesView;
@@ -101,10 +106,14 @@ public class ListAdapter extends BaseAdapter {
                     holder.textViewTitle = (TextView) convertView.findViewById(R.id.textView_title);
                     holder.textViewDate = (TextView) convertView.findViewById(R.id.textView_date);
                     holder.imageView = (ImageView) convertView.findViewById(R.id.imageView);
-                    holder.progressbar = (ProgressBar) convertView.findViewById(R.id.progressBar);
+                    //holder.progressbar = (ProgressBar) convertView.findViewById(R.id.progressBar);
                     holder.textViewName = (TextView) convertView.findViewById(R.id.textView_name);
                     holder.button_link = (Button) convertView.findViewById(R.id.button_link);
                     holder.button_share = (Button) convertView.findViewById(R.id.button_share);
+                    holder.textViewContent = (TextView) convertView.findViewById(R.id.textView_content);
+
+                    holder.imageViewIcon = (ImageView) convertView.findViewById(R.id.imageView_icon);
+                    holder.textViewRegdate = (TextView) convertView.findViewById(R.id.textView_regdate);
 
                     break;
                 case TYPE_AD:
@@ -171,41 +180,74 @@ public class ListAdapter extends BaseAdapter {
                         }
                     });
 
-                    imageDownloader.displayImage(mData.get(position).getImage(), holder.imageView, new ImageLoadingListener() {
+                    Glide.with(mContext)
+                            .load(mData.get(position).getImage())
+                            .thumbnail(0.5f)
+                            .into(new ImageViewTarget<GlideDrawable>(holder.imageView) {
+                                @Override
+                                protected void setResource(GlideDrawable resource) {
+                                    holder.imageView.setVisibility(View.VISIBLE);
+                                    int width =  getWidth()- ScreenUtils.getInstacne().getPixelFromDPI(mContext, 14);
+                                    int height = (int) (resource.getIntrinsicHeight() *(width/(float)resource.getIntrinsicWidth()));
+                                    holder.imageView.setLayoutParams(new FrameLayout.LayoutParams(width,height));
+                                    holder.imageView.setImageDrawable(resource);
+                                }
 
-                        @Override
-                        public void onLoadingStarted(String arg0, View arg1) {
-                            // TODO Auto-generated method stub
-                            holder.imageView.setVisibility(View.INVISIBLE);
-                            holder.progressbar.setVisibility(View.VISIBLE);
-                        }
+                                @Override
+                                public void onLoadFailed(Exception e, Drawable errorDrawable) {
+                                    super.onLoadFailed(e, errorDrawable);
+                                    Glide.with(mContext)
+                                            .load("http://pctu1213.cafe24.com/app/air_ticket/images/no_img.jpg")
+                                            .into(new ImageViewTarget<GlideDrawable>(holder.imageView) {
+                                                @Override
+                                                protected void setResource(GlideDrawable resource) {
+                                                    holder.imageView.setVisibility(View.VISIBLE);
+                                                    int width = getWidth() - ScreenUtils.getInstacne().getPixelFromDPI(mContext, 14);
+                                                    int height = (int) (resource.getIntrinsicHeight() * (width / (float) resource.getIntrinsicWidth()));
+                                                    holder.imageView.setLayoutParams(new FrameLayout.LayoutParams(width, height));
+                                                    holder.imageView.setImageDrawable(resource);
+                                                }
+                                            });
+                                }
+                            });
 
-                        @Override
-                        public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
-                            // TODO Auto-generated method stub
-                            holder.imageView.setVisibility(View.GONE);
-                            holder.progressbar.setVisibility(View.GONE);
-                        }
-                        @Override
-                        public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {
-                            // TODO Auto-generated method stub
 
-                           int width =  getWidth()- ScreenUtils.getInstacne().getPixelFromDPI(mContext, 14);
-                           int height = (int) (arg2.getHeight() *(width/(float)arg2.getWidth()));
-                           holder.imageView.setLayoutParams(new FrameLayout.LayoutParams(width,height));
-                            holder.imageView.setVisibility(View.VISIBLE);
-                            holder.progressbar.setVisibility(View.GONE);
-                        }
 
-                        @Override
-                        public void onLoadingCancelled(String arg0, View arg1) {
-                            // TODO Auto-generated method stub
-                            holder.progressbar.setVisibility(View.GONE);
-                        }
-                    });
+//                    imageDownloader.displayImage(mData.get(position).getImage(), holder.imageView, new ImageLoadingListener() {
+//
+//                        @Override
+//                        public void onLoadingStarted(String arg0, View arg1) {
+//                            // TODO Auto-generated method stub
+//                            holder.imageView.setVisibility(View.INVISIBLE);
+//                            //holder.progressbar.setVisibility(View.VISIBLE);
+//                        }
+//
+//                        @Override
+//                        public void onLoadingFailed(String arg0, View arg1, FailReason arg2) {
+//                            // TODO Auto-generated method stub
+//                            holder.imageView.setVisibility(View.GONE);
+//                            //holder.progressbar.setVisibility(View.GONE);
+//                        }
+//                        @Override
+//                        public void onLoadingComplete(String arg0, View arg1, Bitmap arg2) {
+//                            // TODO Auto-generated method stub
+//
+//                           int width =  getWidth()- ScreenUtils.getInstacne().getPixelFromDPI(mContext, 14);
+//                           int height = (int) (arg2.getHeight() *(width/(float)arg2.getWidth()));
+//                           holder.imageView.setLayoutParams(new FrameLayout.LayoutParams(width,height));
+//                           holder.imageView.setVisibility(View.VISIBLE);
+//                            //holder.progressbar.setVisibility(View.GONE);
+//                        }
+//
+//                        @Override
+//                        public void onLoadingCancelled(String arg0, View arg1) {
+//                            // TODO Auto-generated method stub
+//                            //holder.progressbar.setVisibility(View.GONE);
+//                        }
+//                    });
                 }else{
                     holder.imageView.setVisibility(View.GONE);
-                    holder.progressbar.setVisibility(View.GONE);
+                    //holder.progressbar.setVisibility(View.GONE);
                 }
 
                 holder.button_share.setOnClickListener(new View.OnClickListener() {
@@ -235,14 +277,46 @@ public class ListAdapter extends BaseAdapter {
                 }else {
                     holder.button_link.setVisibility(View.GONE);
                 }
+
+                if(!DsObjectUtils.isEmpty(mData.get(position).getContent())){
+                    holder.textViewContent.setVisibility(View.VISIBLE);
+                    holder.textViewContent.setText(mData.get(position).getContent());
+                }else {
+                    holder.textViewContent.setVisibility(View.GONE);
+                    holder.textViewContent.setText("");
+                }
+
+                if(!DsObjectUtils.isEmpty(mData.get(position).getIcon())){
+                    holder.imageViewIcon.setVisibility(View.VISIBLE);
+
+                    Glide.with(mContext)
+                            .load(mData.get(position).getIcon())
+                            .thumbnail(0.5f)
+                            .into(new ImageViewTarget<GlideDrawable>(holder.imageViewIcon) {
+                                @Override
+                                protected void setResource(GlideDrawable resource) {
+                                    holder.imageViewIcon.setImageDrawable(resource);
+                                }
+                            });
+                }else {
+                    holder.imageViewIcon.setVisibility(View.GONE);
+                }
+
+                if(!DsObjectUtils.isEmpty(mData.get(position).getRegdate())){
+                    holder.textViewRegdate.setVisibility(View.VISIBLE);
+                    holder.textViewRegdate.setText(mData.get(position).getRegdate());
+                }else {
+                    holder.textViewRegdate.setVisibility(View.GONE);
+                    holder.textViewRegdate.setText("");
+                }
                 break;
             case TYPE_AD:
 
-                Log.i("TEST","1");
+                //Log.i("TEST","1");
                 if(mData.get(position).getNativeAd() != null) {
-                    Log.i("TEST","2");
+                    //Log.i("TEST","2");
                     if (mData.get(position).getNativeAd().isAdLoaded()) {
-                        Log.i("TEST","3");
+                       //Log.i("TEST","3");
                         holder.nativeAdMedia.setVisibility(View.VISIBLE);
                         holder.linearLayoutNative.setVisibility(View.VISIBLE);
                         holder.linearLayoutNative2.setVisibility(View.VISIBLE);
@@ -284,11 +358,12 @@ public class ListAdapter extends BaseAdapter {
 
     class ViewHolder {
         ImageView imageView;
-        ProgressBar progressbar;
-        TextView textViewTitle, textViewName, textViewDate, textViewText ;
+        //ProgressBar progressbar;
+        TextView textViewTitle, textViewName, textViewDate, textViewText, textViewContent, textViewRegdate ;
         Button button_link;
-        Button button_share
-                ;
+        Button button_share;
+        ImageView imageViewIcon;
+
 
         LinearLayout linearLayoutNative;
         LinearLayout linearLayoutNative2;

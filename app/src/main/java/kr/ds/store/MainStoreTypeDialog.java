@@ -55,7 +55,6 @@ public class MainStoreTypeDialog extends DialogFragment implements OnClickListen
 		// TODO Auto-generated constructor stub
 		mNativeAd = nativeAd;
 		isNativeCheck = isnativcheck;
-
 	}
 	
 	private DialogResultListner mDialogResultListner;
@@ -114,6 +113,9 @@ public class MainStoreTypeDialog extends DialogFragment implements OnClickListen
 		(mTextView3 = (TextView)view.findViewById(R.id.textView3)).setOnClickListener(this);
 		(mTextView4 = (TextView)view.findViewById(R.id.textView4)).setOnClickListener(this);
 
+		if(Config.TYPE == Config.TSTORE){
+			mTextView1.setVisibility(View.GONE);
+		}
 		if(isNativeCheck){
 			setView();
 		}else{

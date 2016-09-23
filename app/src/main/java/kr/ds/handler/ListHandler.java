@@ -19,6 +19,9 @@ public class ListHandler {
     private NativeAd nativeAd;
     private boolean isNativeLayout;
     private String reservation_link;
+    private String content;
+    private String icon;
+    private String regdate;
 
     public String getName() {
         return name;
@@ -98,5 +101,29 @@ public class ListHandler {
 
     public void setReservation_link(String reservation_link) {
         this.reservation_link = reservation_link;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
+    }
+
+    public String getRegdate() {
+        return regdate;
+    }
+
+    public void setRegdate(String regdate) {
+        this.regdate = regdate;
     }
 }
