@@ -183,6 +183,8 @@ public class ListAdapter extends BaseAdapter {
                     Glide.with(mContext)
                             .load(mData.get(position).getImage())
                             .thumbnail(0.5f)
+                            .override(200,200)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(new ImageViewTarget<GlideDrawable>(holder.imageView) {
                                 @Override
                                 protected void setResource(GlideDrawable resource) {
@@ -198,6 +200,8 @@ public class ListAdapter extends BaseAdapter {
                                     super.onLoadFailed(e, errorDrawable);
                                     Glide.with(mContext)
                                             .load("http://pctu1213.cafe24.com/app/air_ticket/images/no_img.jpg")
+                                            .override(200,200)
+                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                                             .into(new ImageViewTarget<GlideDrawable>(holder.imageView) {
                                                 @Override
                                                 protected void setResource(GlideDrawable resource) {
@@ -292,6 +296,8 @@ public class ListAdapter extends BaseAdapter {
                     Glide.with(mContext)
                             .load(mData.get(position).getIcon())
                             .thumbnail(0.5f)
+                            .override(50,50)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(new ImageViewTarget<GlideDrawable>(holder.imageViewIcon) {
                                 @Override
                                 protected void setResource(GlideDrawable resource) {

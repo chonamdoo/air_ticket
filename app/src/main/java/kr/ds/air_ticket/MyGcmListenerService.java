@@ -101,7 +101,7 @@ public class MyGcmListenerService extends GcmListenerService {
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setContentTitle(getResources().getString(R.string.app_name))
-                .setSmallIcon(R.mipmap.icon)
+                .setSmallIcon(R.mipmap.top)
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)
@@ -120,7 +120,7 @@ public class MyGcmListenerService extends GcmListenerService {
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
                 .setPriority(NotificationCompat.PRIORITY_MAX)
                 .setContentTitle(getResources().getString(R.string.app_name))
-                .setSmallIcon(R.mipmap.icon)
+                .setSmallIcon(R.mipmap.top)
                 .setContentText(message)
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri)

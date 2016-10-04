@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 
 import com.facebook.ads.AbstractAdListener;
@@ -57,7 +60,7 @@ public class MainActivity extends BaseActivity {
             startService(intent);
         }
 
-        Log.i("TEST", SharedPreference.getSharedPreference(getApplicationContext(), Config.ANDROID_ID));
+        //Log.i("TEST", SharedPreference.getSharedPreference(getApplicationContext(), Config.ANDROID_ID));
     }
 
     private void setFaceBook() {
@@ -181,5 +184,23 @@ public class MainActivity extends BaseActivity {
             interstitialAdFackBook.destroy();
         }
         super.onDestroy();
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // TODO Auto-generated method stub
+        MenuInflater inflater = this.getMenuInflater();
+        inflater.inflate(R.menu.menu_setting, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.menu_setting:
+                Intent intent = new Intent(this, SettingActivity.class);
+                startActivity(intent);
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

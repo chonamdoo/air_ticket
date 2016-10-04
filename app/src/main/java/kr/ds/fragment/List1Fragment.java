@@ -241,8 +241,8 @@ public class List1Fragment extends BaseFragment implements SwipeRefreshLayout.On
             }
             mListAdapter.notifyDataSetChanged();
             mIsTheLoding = false;
-            mProgressBar.setVisibility(View.GONE);
         }
+        mProgressBar.setVisibility(View.GONE);
     }
 
     public void setNative(final int type){
