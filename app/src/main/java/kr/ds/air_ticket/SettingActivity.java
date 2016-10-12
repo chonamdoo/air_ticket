@@ -31,7 +31,6 @@ public class SettingActivity extends BaseActivity {
     private BaseFragment mFragment = null;
     private Toolbar mToolbar;
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
