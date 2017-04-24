@@ -7,8 +7,8 @@ import android.content.pm.PackageManager.NameNotFoundException;
 
 public class VersionUtils {
 	public static int VersionCode(Context context){
-    	int VersionCode = 1;
-    	try {
+		int VersionCode = 1;
+		try {
 			PackageManager pm = context.getPackageManager();
 			PackageInfo packageInfo = pm.getPackageInfo(context.getPackageName(), 0);
 			VersionCode = packageInfo.versionCode;
@@ -26,6 +26,21 @@ public class VersionUtils {
 			PackageManager pm = context.getPackageManager();
 			PackageInfo packageInfo = pm.getPackageInfo(context.getPackageName(), 0);
 			VersionName = packageInfo.versionName;
+			return VersionName;
+
+		} catch (NameNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return "";
+	}
+
+	public static String VersionPackageName(Context context){
+		String VersionName = null;
+		try {
+			PackageManager pm = context.getPackageManager();
+			PackageInfo packageInfo = pm.getPackageInfo(context.getPackageName(), 0);
+			VersionName = packageInfo.packageName;
 			return VersionName;
 
 		} catch (NameNotFoundException e) {

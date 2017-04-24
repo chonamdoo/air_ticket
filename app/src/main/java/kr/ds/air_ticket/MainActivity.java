@@ -1,6 +1,7 @@
 package kr.ds.air_ticket;
 
 import android.content.Intent;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v4.app.Fragment;
@@ -22,6 +23,8 @@ import com.facebook.ads.NativeAd;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 
+import java.util.Random;
+
 import kr.ds.config.Config;
 import kr.ds.fragment.BaseFragment;
 import kr.ds.fragment.List1Fragment;
@@ -40,11 +43,15 @@ public class MainActivity extends BaseActivity {
     private static final int PLAY_SERVICES_RESOLUTION_REQUEST = 9000;
 
     private com.facebook.ads.InterstitialAd interstitialAdFackBook;
+    private CountDownTimer mStartCountDownTimer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setFaceBook();
+        if(isFaceBookCheck()) {
+            setFaceBook();
+
+        }
         setNative();
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -77,7 +84,15 @@ public class MainActivity extends BaseActivity {
             @Override
             public void onAdLoaded(Ad ad) {
                 super.onAdLoaded(ad);
-                interstitialAdFackBook.show();
+
+                int random = new Random().nextInt(3);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        interstitialAdFackBook.show();
+                    }
+                }, random*1000);
             }
 
             @Override

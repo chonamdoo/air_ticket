@@ -135,7 +135,7 @@ public class ListAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         switch (getItemViewType(position)) {
-            case TYPE_BASIC:
+                case TYPE_BASIC:
 
                 if(!DsObjectUtils.isEmpty(mData.get(position).getStart()) && !DsObjectUtils.isEmpty(mData.get(position).getEnd())){
                     try {
