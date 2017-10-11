@@ -8,8 +8,8 @@ android {
         applicationId "kr.ds.air_ticket"
         minSdkVersion 15
         targetSdkVersion 23
-        versionCode 13
-        versionName "2.1"
+        versionCode 14
+        versionName "2.2"
         multiDexEnabled true
     }
     buildTypes {
@@ -55,9 +55,6 @@ dependencies {
 
     compile 'com.android.support:multidex:1.0.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
-
-
-
     compile 'com.facebook.android:audience-network-sdk:4.+'
 
 }

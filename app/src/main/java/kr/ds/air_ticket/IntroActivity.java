@@ -21,7 +21,6 @@ public class IntroActivity extends BaseActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if(isFaceBookCheck()){
             OnNext();
         }else{

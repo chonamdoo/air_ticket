@@ -28,6 +28,7 @@ import java.util.Random;
 import kr.ds.config.Config;
 import kr.ds.fragment.BaseFragment;
 import kr.ds.fragment.List1Fragment;
+import kr.ds.fragment.List1RecyclerFragment;
 import kr.ds.store.MainStoreTypeDialog;
 import kr.ds.utils.DsObjectUtils;
 import kr.ds.utils.SharedPreference;
@@ -50,16 +51,14 @@ public class MainActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         if(isFaceBookCheck()) {
             setFaceBook();
-
         }
-        setNative();
         setContentView(R.layout.activity_main);
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         if (mToolbar != null) {
             mToolbar.setTitle("");
             setSupportActionBar(mToolbar);
         }
-        mFragment = BaseFragment.newInstance(List1Fragment.class);
+        mFragment = BaseFragment.newInstance(List1RecyclerFragment.class);
         setFragment(mFragment);
 
         if (checkPlayServices() && DsObjectUtils.getInstance(getApplicationContext()).isEmpty(SharedPreference.getSharedPreference(getApplicationContext(), Config.TOKEN))) { //토큰이 없는경우..
@@ -141,53 +140,12 @@ public class MainActivity extends BaseActivity {
         mFt.commitAllowingStateLoss();
     }
 
-    public void setNative(){
-        mNativeAd = new NativeAd(getApplicationContext(), "294077530963387_294077644296709");
-        mNativeAd.setAdListener(new AbstractAdListener() {
-            @Override
-            public void onError(Ad ad, AdError adError) {
-                super.onError(ad, adError);
-                isNativeCheck = false;
-            }
 
-            @Override
-            public void onAdLoaded(Ad ad) {
-                super.onAdLoaded(ad);
-                if(ad != mNativeAd){
-                    isNativeCheck = false;
-                    return;
-                }
-                isNativeCheck = true;
-            }
-
-            @Override
-            public void onAdClicked(Ad ad) {
-                super.onAdClicked(ad);
-            }
-
-            @Override
-            public void onInterstitialDisplayed(Ad ad) {
-                super.onInterstitialDisplayed(ad);
-            }
-
-            @Override
-            public void onInterstitialDismissed(Ad ad) {
-                super.onInterstitialDismissed(ad);
-            }
-
-            @Override
-            public void onLoggingImpression(Ad ad) {
-                super.onLoggingImpression(ad);
-            }
-        });
-        mNativeAd.loadAd();
-    }
     public boolean onKeyDown(int KeyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN) {
             if (KeyCode == KeyEvent.KEYCODE_BACK) {
-                final MainStoreTypeDialog mMainDialog = new MainStoreTypeDialog(mNativeAd, isNativeCheck);// call the static method
+                final MainStoreTypeDialog mMainDialog = new MainStoreTypeDialog();// call the static method
                 mMainDialog.show(getSupportFragmentManager(), "dialog");
-                setNative();
                 return true;
             }
         }
