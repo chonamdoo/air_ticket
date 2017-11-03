@@ -21,63 +21,62 @@ public class IntroActivity extends BaseActivity{
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if(isFaceBookCheck()){
-            OnNext();
-        }else{
-            setContentView(R.layout.activity_intro);
+        setContentView(R.layout.activity_intro);
 
-            interstitialAd = new InterstitialAd(getApplicationContext());
-            interstitialAd.setAdUnitId("ca-app-pub-3957553723261794/8289790466");
-            AdRequest adRequest = new AdRequest.Builder().build();
+        interstitialAd = new InterstitialAd(getApplicationContext());
+        interstitialAd.setAdUnitId("ca-app-pub-3957553723261794/8289790466");
+        AdRequest adRequest = new AdRequest.Builder().build();
 
-            interstitialAd.loadAd(adRequest);
-            interstitialAd.setAdListener(new AdListener() {
-                @Override
-                public void onAdClosed() {
-                    // TODO Auto-generated method stub
-                    super.onAdClosed();
-                    OnNext();
-                }
-                @Override
-                public void onAdLoaded() {
-                    // TODO Auto-generated method stub
-                    super.onAdLoaded();
+        interstitialAd.loadAd(adRequest);
+        interstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdClosed() {
+                // TODO Auto-generated method stub
+                super.onAdClosed();
+                OnNext();
+            }
 
-                }
-                @Override
-                public void onAdFailedToLoad(int errorCode) {
-                    // TODO Auto-generated method stub
-                    super.onAdFailedToLoad(errorCode);
-                    OnNext();
-                }
-            });
+            @Override
+            public void onAdLoaded() {
+                // TODO Auto-generated method stub
+                super.onAdLoaded();
 
-            //10초 딜레이
-            mStartCountDownTimer = new CountDownTimer(7000, 1000) {
-                @Override
-                public void onTick(long millisUntilFinished) {
-                    // TODO Auto-generated method stub
-                    if(mCount > 1){
-                        if (interstitialAd.isLoaded()) {
-                            if(mStartCountDownTimer != null){
-                                mStartCountDownTimer.cancel();
-                            }
-                            interstitialCanceled = true;
-                            interstitialAd.show();
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // TODO Auto-generated method stub
+                super.onAdFailedToLoad(errorCode);
+                OnNext();
+            }
+        });
+
+        //10초 딜레이
+        mStartCountDownTimer = new CountDownTimer(7000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                // TODO Auto-generated method stub
+                if (mCount > 1) {
+                    if (interstitialAd.isLoaded()) {
+                        if (mStartCountDownTimer != null) {
+                            mStartCountDownTimer.cancel();
                         }
-                    }
-                    mCount++;
-                }
-                @Override
-                public void onFinish() {
-                    // TODO Auto-generated method stub
-                    if(!interstitialCanceled) {
-                        OnNext();
+                        interstitialCanceled = true;
+                        interstitialAd.show();
                     }
                 }
-            };
-            mStartCountDownTimer.start();
-        }
+                mCount++;
+            }
+
+            @Override
+            public void onFinish() {
+                // TODO Auto-generated method stub
+                if (!interstitialCanceled) {
+                    OnNext();
+                }
+            }
+        };
+        mStartCountDownTimer.start();
     }
 
     @Override
