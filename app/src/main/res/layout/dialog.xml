@@ -33,7 +33,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:padding="10dip"
-                        android:text="혹시 광고때문에 불편하신가요?ㅠㅠ\n개발자의 서버비와 라면값으로 조금만 이해주세요ㅠㅠ\n\n여러분의 좋은 리뷰와 광고 클릭으로 개발자는\n많은 힘을 얻고 좋은서비스를 할 수 있는 힘이 생겨요!!! \n조금만 양해부탁드립니다.♡♡♡ "
+                        android:text="안녕하세요. 어플 이용해주셔서 감사합니다.\n\n리뷰와 별점을 주시면 항상 최선을 다해 노력하여 업데이트 하겠습니다.\n\n개발자는 많은 힘을 얻을 수 있습니다.\n\n감사합니다."
                         android:textColor="@color/black"
                         android:textSize="14sp"/>
                 </LinearLayout>
